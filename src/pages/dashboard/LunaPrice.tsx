@@ -3,8 +3,6 @@ import { useCurrency } from "data/settings/Currency"
 import { useMemoizedPrices } from "data/queries/oracle"
 import { Card } from "components/layout"
 import { Read } from "components/token"
-import { ModalButton } from "components/feedback"
-import LunaPriceChart from "../charts/LunaPriceChart"
 import DashboardContent from "./components/DashboardContent"
 import styles from "./Dashboard.module.scss"
 
@@ -20,16 +18,6 @@ const LunaPrice = () => {
     return (
       <DashboardContent
         value={<Read amount={String(price * 1e6)} denom={denom} auto />}
-        footer={
-          <ModalButton
-            title={t("Lunc price")}
-            renderButton={(open) => (
-              <button onClick={open}>{t("Show chart")}</button>
-            )}
-          >
-            <LunaPriceChart />
-          </ModalButton>
-        }
       />
     )
   }
