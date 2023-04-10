@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useFieldArray, useForm } from "react-hook-form"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
-import { MsgExecuteContract } from "@terra-money/terra.js"
+import { MsgExecuteContract } from "@terra-rebels/terra.js"
 import { sortCoins } from "utils/coin"
 import { parseJSON, validateMsg } from "utils/data"
 import { queryKey } from "data/query"
@@ -43,15 +43,7 @@ const ExecuteContractForm = () => {
     defaultValues: { coins: [defaultItem] },
   })
 
-  const {
-    register,
-    control,
-    watch,
-    handleSubmit,
-    formState,
-    setValue,
-    getValues,
-  } = form
+  const { register, control, watch, handleSubmit, formState } = form
   const { errors } = formState
   const values = watch()
   const { coins } = values
@@ -131,15 +123,7 @@ const ExecuteContractForm = () => {
                     inputMode="decimal"
                     placeholder={getPlaceholder(decimals)}
                     selectBefore={
-                      <Select
-                        {...register(`coins.${index}.denom`)}
-                        handleChange={(value) =>
-                          setValue(`coins.${index}.denom`, value)
-                        }
-                        currentValue={getValues(`coins.${index}.denom`)}
-                        isToken
-                        before
-                      >
+                      <Select {...register(`coins.${index}.denom`)} before>
                         {sortCoins(bankBalance).map(({ denom }) => (
                           <WithTokenItem token={denom} key={denom}>
                             {({ symbol }) => (

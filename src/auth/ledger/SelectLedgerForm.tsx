@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState, useRef } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { useTranslation } from "react-i18next"
-import { truncate } from "@terra.kitchen/utils"
+import { truncate } from "@terra-rebels/kitchen-utils"
 import { Pre } from "components/general"
 import { Card, FlexColumn, Grid } from "components/layout"
 import { Form, FormError, FormHelp } from "components/form"
@@ -16,7 +16,7 @@ import { LoadingCircular, Modal, Mode } from "components/feedback"
 import { useThemeAnimation } from "data/settings/Theme"
 import styles from "components/layout/Card.module.scss"
 import { useIsClassic } from "../../data/query"
-import { AccAddress, Tx } from "@terra-money/terra.js"
+import { AccAddress, Tx } from "@terra-rebels/terra.js"
 
 interface DeviceInterface {
   name: string

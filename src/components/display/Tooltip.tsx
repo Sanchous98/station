@@ -30,18 +30,21 @@ export default Tooltip
 /* derive */
 interface Props extends Omit<TippyProps, "children"> {
   children: ReactNode
+  className?: string
 }
 
 export const TooltipIcon = (props: Props) => {
   return (
-    <InlineFlex gap={4} start>
+    <InlineFlex gap={4} className={props.className} start>
       {props.children}
-      <Tooltip {...props}>
-        <HelpOutlineOutlinedIcon
-          fontSize="inherit"
-          className="muted"
-          onClick={(e) => e.stopPropagation()}
-        />
+      <Tooltip
+        {...{
+          ...props,
+          className:
+            undefined /* Do not pass the className provided by Props */,
+        }}
+      >
+        <HelpOutlineOutlinedIcon fontSize="inherit" className="muted" />
       </Tooltip>
     </InlineFlex>
   )

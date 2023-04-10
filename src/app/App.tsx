@@ -1,4 +1,4 @@
-import { AccAddress } from "@terra-money/terra.js"
+import { AccAddress } from "@terra-rebels/terra.js"
 import { getErrorMessage } from "utils/error"
 import Layout, { Page } from "components/layout"
 import { Banner, Content, Header, Actions, Sidebar } from "components/layout"

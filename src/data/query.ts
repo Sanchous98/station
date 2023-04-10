@@ -1,9 +1,9 @@
 import { useChainID } from "auth/hooks/useNetwork"
-import { LAZY_LIMIT } from "config/constants"
+import { LAZY_LIMIT, CLASSIC_CHAIN_IDS } from "config/constants"
 
 export const useIsClassic = () => {
   const chainId = useChainID()
-  return chainId.startsWith("columbus")
+  return CLASSIC_CHAIN_IDS.filter((id) => chainId.startsWith(id)).length !== 0
 }
 
 /* refetch */

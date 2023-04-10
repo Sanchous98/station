@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js"
-import { toAmount } from "@terra.kitchen/utils"
+import { toAmount } from "@terra-rebels/kitchen-utils"
 
 export const has = (value?: BigNumber.Value) =>
   !!value && new BigNumber(value).gte(1)

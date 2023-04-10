@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
-import { isDenomIBC, isDenomTerra } from "@terra.kitchen/utils"
-import { readDenom, truncate } from "@terra.kitchen/utils"
-import { AccAddress } from "@terra-money/terra.js"
+import { isDenomIBC, isDenomTerra } from "@terra-rebels/kitchen-utils"
+import { readDenom, truncate } from "@terra-rebels/kitchen-utils"
+import { AccAddress } from "@terra-rebels/terra.js"
 import { ASSETS } from "config/constants"
 import { useIsClassic } from "./query"
 import { useIBCBaseDenom } from "./queries/ibc"
@@ -75,7 +75,7 @@ export const readNativeDenom = (
   isClassic?: boolean
 ): TokenItem => {
   const symbol = readDenom(denom)
-  const symbolClassic = denom === "uluna" ? "LUNC" : symbol + "C"
+  const symbolClassic = denom === "uluna" ? "LUNC" : symbol
 
   const path = isDenomTerra(denom)
     ? `Terra/${symbol}.svg`

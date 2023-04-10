@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { readAmount } from "@terra.kitchen/utils"
+import { readAmount } from "@terra-rebels/kitchen-utils"
 import { combineState } from "data/query"
 import { useSupply } from "data/queries/bank"
 import { useStakingPool } from "data/queries/staking"
@@ -26,7 +26,7 @@ const StakingRatio = () => {
     if (!issuance) return null
 
     const ratio = Number(bonded) / Number(issuance)
-    const tooltip = t("{{amount}} Luna staked", {
+    const tooltip = t("{{amount}} Lunc staked", {
       amount: readAmount(bonded, { prefix: true, integer: true }),
     })
 
@@ -40,7 +40,7 @@ const StakingRatio = () => {
         footer={
           !isWallet.mobile() && (
             <DashboardTag>
-              {[t("Staked Luna"), t("Total Luna")].join(" / ")}
+              {[t("Staked Lunc"), t("Total Lunc")].join(" / ")}
             </DashboardTag>
           )
         }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
-import { AccAddress } from "@terra-money/terra.js"
+import { AccAddress } from "@terra-rebels/terra.js"
 import { useTnsAddress } from "data/external/tns"
 import { Card } from "components/layout"
 import { Form } from "components/form"

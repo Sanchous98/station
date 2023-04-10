@@ -50,7 +50,7 @@ const Nav = () => {
     <nav>
       <header className={styles.header}>
         <NavLink to="/" className={classNames(styles.item, styles.logo)}>
-          <strong>Terra</strong> Station
+          <strong>Rebel</strong> Station
         </NavLink>
 
         <NavLink
@@ -106,7 +106,7 @@ const Nav = () => {
       <section className={styles.menu}>
         <div className={classNames(styles.menuTitle)}>
           <NavLink to="/wallet" onClick={close}>
-            <strong>Terra</strong> Station
+            <strong>Rebel</strong> Station
           </NavLink>
           {is.mobileNative() && (
             <>

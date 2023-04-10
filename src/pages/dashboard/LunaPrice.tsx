@@ -16,7 +16,7 @@ const ChartButton = forwardRef<ModalRef, any>((_, ref) => {
   return (
     <ModalButton
       ref={ref}
-      title={t("Luna price")}
+      title={t("Lunc price")}
       modalType={isWallet.mobile() ? Mode.FULL : Mode.DEFAULT}
       renderButton={(open) => (
         <div onClick={open}>
@@ -58,7 +58,7 @@ const LunaPrice = () => {
   return (
     <Card
       {...state}
-      title={t("Luna price")}
+      title={t("Lunc price")}
       className={styles.price}
       size="small"
       extra={isWallet.mobile() && <ChartButton ref={modalRef} />}

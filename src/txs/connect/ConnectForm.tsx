@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { useForm } from "react-hook-form"
 
-import { AccAddress } from "@terra-money/terra.js"
+import { AccAddress } from "@terra-rebels/terra.js"
 import { Card, Flex, FlexColumn, Grid } from "components/layout"
 import { Form } from "components/form"
 import Tx from "../Tx"

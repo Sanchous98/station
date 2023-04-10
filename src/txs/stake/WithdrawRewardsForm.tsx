@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form"
 import BigNumber from "bignumber.js"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess"
-import { isDenomTerraNative, readDenom, truncate } from "@terra.kitchen/utils"
-import { Validator, ValAddress, Coin, MsgSwap } from "@terra-money/terra.js"
-import { Rewards } from "@terra-money/terra.js"
-import { MsgWithdrawDelegatorReward } from "@terra-money/terra.js"
+import { isDenomTerraNative, truncate } from "@terra-rebels/kitchen-utils"
+import { Validator, ValAddress } from "@terra-rebels/terra.js"
+import { Rewards } from "@terra-rebels/terra.js"
+import { MsgWithdrawDelegatorReward } from "@terra-rebels/terra.js"
 import { queryKey } from "data/query"
 import { useCurrency } from "data/settings/Currency"
 import { useAddress } from "data/wallet"
@@ -86,8 +86,8 @@ const WithdrawRewardsForm = ({ rewards, validators, ...props }: Props) => {
     ? t("Not selected")
     : selected.length === 1
     ? findMoniker(selected[0])
-    : findMoniker(selected[0]) +
-      t(" and {{length}} others", {
+    : t("{{moniker}} and {{length}} others", {
+        moniker: findMoniker(selected[0]),
         length: selected.length - 1,
       })
 

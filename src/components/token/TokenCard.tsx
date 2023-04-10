@@ -1,13 +1,12 @@
 import { PropsWithChildren } from "react"
 import classNames from "classnames/bind"
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
-import { FormatConfig } from "@terra.kitchen/utils"
+import { FormatConfig } from "@terra-rebels/kitchen-utils"
 import { getMaxHeightStyle } from "utils/style"
 import { Flex } from "../layout"
 import TokenIcon from "./TokenIcon"
 import Read from "./Read"
 import styles from "./TokenCard.module.scss"
-import { isWallet } from "auth"
 
 const cx = classNames.bind(styles)
 
@@ -69,7 +68,7 @@ export const TokenCardGrid = (props: PropsWithChildren<GridProps>) => {
   return (
     <section
       className={cx(styles.grid, { single: singleColumn })}
-      style={!isWallet.mobile() ? getMaxHeightStyle(maxHeight, 320) : undefined}
+      style={getMaxHeightStyle(maxHeight, 320)}
     >
       {children}
     </section>

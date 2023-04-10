@@ -1,7 +1,7 @@
 import { PropsWithChildren, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import VerifiedIcon from "@mui/icons-material/Verified"
-import { readPercent } from "@terra.kitchen/utils"
+import { readPercent } from "@terra-rebels/kitchen-utils"
 
 import { useIsClassic } from "data/query"
 import { Card, Flex, Grid } from "components/layout"
@@ -14,7 +14,7 @@ import styles from "./Validators.module.scss"
 import { ReactComponent as SortingIcon } from "styles/images/icons/Sorting.svg"
 import { ModalButton, ModalRef, Mode } from "components/feedback"
 import { TerraValidator } from "types/validator"
-import { Delegation, UnbondingDelegation } from "@terra-money/terra.js"
+import { Delegation, UnbondingDelegation } from "@terra-rebels/terra.js"
 
 export interface ActiveValidator extends TerraValidator {
   rank: number

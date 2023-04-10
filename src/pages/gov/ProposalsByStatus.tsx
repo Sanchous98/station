@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { reverse } from "ramda"
-import { Proposal } from "@terra-money/terra.js"
+import { atom, useRecoilState } from "recoil"
+import { Proposal } from "@terra-rebels/terra.js"
 import { combineState } from "data/query"
 import { useProposals, useProposalStatusItem } from "data/queries/gov"
 import { useTerraAssets } from "data/Terra/TerraAssets"
@@ -14,6 +14,19 @@ import styles from "./ProposalsByStatus.module.scss"
 import { useNetworkName } from "data/wallet"
 import { isWallet } from "auth"
 import PageLoading from "auth/modules/PageLoading"
+import PaginationButtons from "../../components/layout/PaginationButtons"
+
+const DefaultGovernancePaginationState = {
+  key: "",
+  stack: [],
+  status: undefined,
+  total: 0,
+}
+
+const governancePaginationState = atom({
+  key: "governancePaginationState",
+  default: DefaultGovernancePaginationState,
+})
 
 const ProposalsByStatus = ({ status }: { status: Proposal.Status }) => {
   const { t } = useTranslation()
@@ -25,21 +38,137 @@ const ProposalsByStatus = ({ status }: { status: Proposal.Status }) => {
   const whitelist = whitelistData?.[networkName]
 
   const [showAll, setShowAll] = useState(!!whitelist)
-  const toggle = () => setShowAll((state) => !state)
+  const toggle = () => {
+    setShowAll((state) => !state)
+    setPaginationState(DefaultGovernancePaginationState)
+  }
 
-  const { data, ...proposalState } = useProposals(status)
+  const PAGINATION_LENGTH =
+    status === Proposal.Status.PROPOSAL_STATUS_VOTING_PERIOD && !showAll
+      ? 999
+      : 6
+
+  const [paginationState, setPaginationState] = useRecoilState(
+    governancePaginationState
+  )
+  const key = (paginationState && paginationState.key) || ""
+  const pageStack = (paginationState && paginationState.stack) || []
+  const page = pageStack.length + 1
+  const total = (paginationState && paginationState.total) || 0
+
+  /* reset pagination on status change */
+  useEffect(() => {
+    if (
+      !(
+        paginationState &&
+        paginationState.status &&
+        paginationState.status !== status
+      )
+    )
+      return
+
+    setPaginationState(DefaultGovernancePaginationState)
+  }, [paginationState, setPaginationState, status])
+
+  /* Note the following duplicate call to useProposals is a workaround
+  for the issue described by https://github.com/terra-money/station/issues/133 */
+  const { data: countData, ...proposalCountState } = useProposals(status, {
+    "pagination.count_total": "true",
+    "pagination.limit": "1",
+  })
+  const [, paginationCountData] = countData || []
+
+  const { data, ...proposalState } = useProposals(status, {
+    "pagination.count_total": "false",
+    "pagination.reverse": "true",
+    "pagination.limit":
+      status === Proposal.Status.PROPOSAL_STATUS_VOTING_PERIOD && !showAll
+        ? "999"
+        : String(PAGINATION_LENGTH),
+    "pagination.key": key,
+  })
+  const [proposalData, paginationData] = data || []
+
+  useEffect(() => {
+    if (
+      !(
+        paginationCountData &&
+        paginationCountData.total > 0 &&
+        paginationCountData.total !== total
+      )
+    )
+      return
+
+    setPaginationState(
+      Object.assign({}, paginationState, { total: paginationCountData.total })
+    )
+  }, [
+    paginationCountData,
+    paginationState,
+    proposalCountState,
+    setPaginationState,
+    total,
+  ])
+
   const { label } = useProposalStatusItem(status)
 
-  const state = combineState(whitelistState, proposalState)
+  const state = combineState(whitelistState, proposalState, proposalCountState)
+
+  /* pagination */
+  const handleNext = () => {
+    if (!(paginationState && paginationData && paginationData.next_key))
+      return null
+    if (paginationData.next_key === key) return
+
+    setPaginationState(
+      Object.assign({}, paginationState, {
+        stack: [...pageStack, paginationData.next_key],
+        key: paginationData.next_key,
+        status: status,
+        page: page + 1,
+      })
+    )
+  }
+
+  const handlePrevious = () => {
+    setPaginationState(
+      Object.assign({}, paginationState, {
+        stack: pageStack.slice(0, pageStack.length - 1),
+        key: [...pageStack].reverse()[1],
+        status: status,
+        page: page - 1,
+      })
+    )
+  }
+
+  const renderPagination = () => {
+    if (!(PAGINATION_LENGTH && paginationData)) return null
+    const recordTotal = Math.ceil(total / PAGINATION_LENGTH)
+
+    if (!recordTotal || recordTotal === 1) return null
+    const prevPage = page > 1 ? () => handlePrevious() : undefined
+    const nextPage = page < total ? () => handleNext() : undefined
+
+    return (
+      <footer className={styles.pagination}>
+        <PaginationButtons
+          current={page}
+          total={recordTotal}
+          onPrev={prevPage}
+          onNext={nextPage}
+        />
+      </footer>
+    )
+  }
 
   const render = () => {
-    if (!(data && whitelistData))
+    if (!(proposalData && whitelistData))
       return isWallet.mobileNative() ? <PageLoading inCard /> : null
 
     const proposals =
       status === Proposal.Status.PROPOSAL_STATUS_VOTING_PERIOD && !showAll
-        ? data.filter(({ id }) => whitelist?.includes(id))
-        : data
+        ? proposalData.filter(({ id }) => whitelist?.includes(id))
+        : proposalData
 
     return !proposals.length ? (
       <>
@@ -55,7 +184,7 @@ const ProposalsByStatus = ({ status }: { status: Proposal.Status }) => {
     ) : (
       <>
         <section className={styles.list}>
-          {reverse(proposals).map((item) => (
+          {proposals.map((item) => (
             <Card
               to={`/proposal/${item.id}`}
               className={styles.link}
@@ -65,6 +194,8 @@ const ProposalsByStatus = ({ status }: { status: Proposal.Status }) => {
             </Card>
           ))}
         </section>
+
+        {renderPagination()}
 
         <GovernanceParams />
       </>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { useWallet } from "@terra-money/wallet-provider"
+import { useWallet } from "@terra-rebels/wallet-provider"
 import classNames from "classnames/bind"
 
 import { Col, Page } from "components/layout"

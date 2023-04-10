@@ -1,6 +1,6 @@
 import { toast } from "react-toastify"
 
-import { CreateTxOptions, Fee, Msg } from "@terra-money/terra.js"
+import { CreateTxOptions, Fee, Msg } from "@terra-rebels/terra.js"
 import { getStoredSessions } from "../auth/scripts/sessions"
 import is from "../auth/scripts/is"
 

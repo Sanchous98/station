@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react"
 import { useTranslation } from "react-i18next"
 import xss from "xss"
-import { Proposal } from "@terra-money/terra.js"
+import { Proposal } from "@terra-rebels/terra.js"
 import { ExternalLink } from "components/general"
 import { Grid } from "components/layout"
 import { TooltipIcon } from "components/display"
@@ -83,5 +83,8 @@ export default ProposalDescription
 
 const isWhitelisted = (url?: string) => {
   if (!url) return false
-  return new URL(url).hostname.endsWith("terra.money")
+  return (
+    new URL(url).hostname.endsWith("terrarebels.net") ||
+    new URL(url).hostname.endsWith("terra.money")
+  )
 }

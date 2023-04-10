@@ -11,6 +11,8 @@ import { ReactComponent as GovernanceIcon } from "styles/images/menu/Governance.
 import { ReactComponent as ContractIcon } from "styles/images/menu/Contract.svg"
 import { ReactComponent as SettingsIcon } from "styles/images/menu/Settings.svg"
 import { ReactComponent as DashboardIcon } from "styles/images/menu/Dashboard.svg"
+import BurnIcon from "@mui/icons-material/LocalFireDepartment"
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance"
 
 /* menu */
 import Dashboard from "pages/dashboard/Dashboard"
@@ -29,6 +31,8 @@ import ProposalDetails from "pages/gov/ProposalDetails"
 import SendTx from "txs/send/SendTx"
 import ConfirmTx from "txs/confirm/ConfirmTx"
 import ConnectTx from "txs/connect/ConnectTx"
+import BurnTx from "txs/send/BurnTx"
+import FundTx from "txs/send/FundTx"
 import TransferCW721Tx from "txs/wasm/TransferCW721Tx"
 import SwapTx from "txs/swap/SwapTx"
 import SwapMultipleTx from "txs/swap/SwapMultipleTx"
@@ -95,6 +99,18 @@ export const useNav = () => {
       element: <Stake />,
       title: t("Stake"),
       icon: <StakeIcon {...ICON_SIZE} />,
+    },
+    {
+      path: "/burn",
+      element: <BurnTx />,
+      title: t("Burn"),
+      icon: <BurnIcon {...ICON_SIZE} />,
+    },
+    {
+      path: "/fund",
+      element: <FundTx />,
+      title: t("Fund"),
+      icon: <AccountBalanceIcon {...ICON_SIZE} />,
     },
     {
       path: "/gov",

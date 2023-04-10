@@ -5,7 +5,7 @@ import LockIcon from "@mui/icons-material/Lock"
 import InfoIcon from "@mui/icons-material/Info"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 import { capitalize } from "@mui/material"
-import { readAmount } from "@terra.kitchen/utils"
+import { readAmount } from "@terra-rebels/kitchen-utils"
 import { themes } from "styles/themes/themes"
 import { useAddress } from "data/wallet"
 import { useThemeState, useValidateTheme } from "data/settings/Theme"
@@ -46,7 +46,7 @@ const Selector = () => {
                 <FlexColumn gap={4} className={styles.unlock}>
                   <LockIcon fontSize="small" />
                   <small>
-                    {t("Stake {{amount}} Luna to unlock", {
+                    {t("Stake {{amount}} Lunc to unlock", {
                       amount: readAmount(unlock, { comma: true }),
                     })}
                   </small>

@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next"
 import { useFieldArray, useForm } from "react-hook-form"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
-import { AccAddress } from "@terra-money/terra.js"
-import { MsgInstantiateContract } from "@terra-money/terra.js"
+import { AccAddress } from "@terra-rebels/terra.js"
+import { MsgInstantiateContract } from "@terra-rebels/terra.js"
 import { SAMPLE_ADDRESS } from "config/constants"
 import { sortCoins } from "utils/coin"
 import { parseJSON, validateMsg } from "utils/data"
@@ -44,15 +44,7 @@ const InstantiateContractForm = () => {
     defaultValues: { coins: [defaultItem] },
   })
 
-  const {
-    register,
-    control,
-    watch,
-    handleSubmit,
-    formState,
-    setValue,
-    getValues,
-  } = form
+  const { register, control, watch, handleSubmit, formState } = form
   const { errors } = formState
   const values = watch()
   const { coins } = values
@@ -167,15 +159,7 @@ const InstantiateContractForm = () => {
                     inputMode="decimal"
                     placeholder={getPlaceholder(decimals)}
                     selectBefore={
-                      <Select
-                        {...register(`coins.${index}.denom`)}
-                        handleChange={(value) =>
-                          setValue(`coins.${index}.denom`, value)
-                        }
-                        currentValue={getValues(`coins.${index}.denom`)}
-                        isToken
-                        before
-                      >
+                      <Select {...register(`coins.${index}.denom`)} before>
                         {sortCoins(bankBalance).map(({ denom }) => (
                           <WithTokenItem token={denom} key={denom}>
                             {({ symbol }) => (

@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "react-query"
-import { isDenom, isDenomLuna, isDenomTerra } from "@terra.kitchen/utils"
+import { isDenom, isDenomLuna, isDenomTerra } from "@terra-rebels/kitchen-utils"
 import { queryKey, RefetchOptions } from "../query"
 import { useLCDClient } from "./lcdClient"
 

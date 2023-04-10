@@ -3,12 +3,15 @@ import { useTranslation } from "react-i18next"
 import { useFieldArray, useForm } from "react-hook-form"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
-import { AccAddress, Coins, MsgSubmitProposal } from "@terra-money/terra.js"
-import { TextProposal, CommunityPoolSpendProposal } from "@terra-money/terra.js"
-import { ParameterChangeProposal, ParamChange } from "@terra-money/terra.js"
-import { ExecuteContractProposal } from "@terra-money/terra.js/dist/core/wasm/proposals"
-import { isDenomTerraNative } from "@terra.kitchen/utils"
-import { readAmount, readDenom, toAmount } from "@terra.kitchen/utils"
+import { AccAddress, Coins, MsgSubmitProposal } from "@terra-rebels/terra.js"
+import {
+  TextProposal,
+  CommunityPoolSpendProposal,
+} from "@terra-rebels/terra.js"
+import { ParameterChangeProposal, ParamChange } from "@terra-rebels/terra.js"
+import { ExecuteContractProposal } from "@terra-rebels/terra.js/dist/core/wasm/proposals"
+import { isDenomTerraNative } from "@terra-rebels/kitchen-utils"
+import { readAmount, readDenom, toAmount } from "@terra-rebels/kitchen-utils"
 import { SAMPLE_ADDRESS } from "config/constants"
 import { getAmount, sortCoins } from "utils/coin"
 import { has } from "utils/num"
@@ -89,23 +92,10 @@ const SubmitProposalForm = ({ communityPool, minDeposit }: Props) => {
   /* form */
   const form = useForm<TxValues>({
     mode: "onChange",
-    defaultValues: {
-      input: toInput(minDeposit),
-      coins: [defaultCoinItem],
-      type: ProposalType.TEXT as any,
-      spend: { denom: "uluna" },
-    },
+    defaultValues: { input: toInput(minDeposit), coins: [defaultCoinItem] },
   })
 
-  const {
-    register,
-    trigger,
-    control,
-    watch,
-    setValue,
-    handleSubmit,
-    getValues,
-  } = form
+  const { register, trigger, control, watch, setValue, handleSubmit } = form
   const { errors } = form.formState
   const { input, ...values } = watch()
   const amount = toAmount(input)
@@ -232,13 +222,7 @@ const SubmitProposalForm = ({ communityPool, minDeposit }: Props) => {
               inputMode="decimal"
               placeholder={placeholder}
               selectBefore={
-                <Select
-                  {...register("spend.denom")}
-                  handleChange={(value) => setValue("spend.denom", value)}
-                  currentValue={getValues("spend.denom")}
-                  isToken
-                  before
-                >
+                <Select {...register("spend.denom")} before>
                   {["uluna", "uusd"].map((denom) => (
                     <option value={denom} key={denom}>
                       {readDenom(denom)}
@@ -368,15 +352,7 @@ const SubmitProposalForm = ({ communityPool, minDeposit }: Props) => {
                   inputMode="decimal"
                   placeholder={getPlaceholder()}
                   selectBefore={
-                    <Select
-                      {...register(`coins.${index}.denom`)}
-                      handleChange={(value) =>
-                        setValue(`coins.${index}.denom`, value)
-                      }
-                      currentValue={getValues(`coins.${index}.denom`)}
-                      isToken
-                      before
-                    >
+                    <Select {...register(`coins.${index}.denom`)} before>
                       {sortCoins(bankBalance)
                         .filter(({ denom }) => isDenomTerraNative(denom))
                         .map(({ denom }) => (
@@ -426,11 +402,7 @@ const SubmitProposalForm = ({ communityPool, minDeposit }: Props) => {
           </Grid>
 
           <FormItem label={t("Proposal type")} error={errors.type?.message}>
-            <Select
-              {...register("type")}
-              handleChange={(value) => setValue("type", value)}
-              currentValue={getValues("type")}
-            >
+            <Select {...register("type")}>
               {Object.values(ProposalType).map((type) => (
                 <option value={type} key={type}>
                   {t(type)}
@@ -456,14 +428,14 @@ const SubmitProposalForm = ({ communityPool, minDeposit }: Props) => {
                 required: "Description is required",
               })}
               placeholder={t(
-                "We're proposing to spend 100,000 LUNA from the Community Pool to fund the creation of public goods for the Terra ecosystem"
+                "We're proposing to spend 100,000 LUNC from the Community Pool to fund the creation of public goods for the Terra ecosystem"
               )}
             />
           </FormItem>
 
           <FormItem
             label={
-              <TooltipIcon content="To help push the proposal to the voting period, consider depositing more LUNA to reach the minimum 512 LUNA (optional).">
+              <TooltipIcon content="To help push the proposal to the voting period, consider depositing more LUNC to reach the minimum 512 LUNC (optional).">
                 {t("Initial deposit")} ({t("optional")})
               </TooltipIcon>
             }

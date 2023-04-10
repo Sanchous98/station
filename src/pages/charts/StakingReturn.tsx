@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { last } from "ramda"
 import { capitalize } from "@mui/material"
-import { readPercent } from "@terra.kitchen/utils"
+import { readPercent } from "@terra-rebels/kitchen-utils"
 import { AggregateStakingReturn } from "data/Terra/TerraAPI"
 import { useStakingReturn } from "data/Terra/TerraAPI"
 import { Select } from "components/form"
@@ -88,7 +88,7 @@ const StakingReturn = () => {
       title={
         <TooltipIcon
           content={t(
-            "The annualized staking yield for Luna is based on gas rewards, minting rewards, and the price of Luna (annualized return = 10 day moving average return * 365)."
+            "The annualized staking yield for Lunc is based on gas rewards, minting rewards, and the price of Lunc (annualized return = 10 day moving average return * 365)."
           )}
         >
           {t("Staking return")}

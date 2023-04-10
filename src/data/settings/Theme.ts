@@ -32,11 +32,6 @@ export const useTheme = () => {
   return find(name)
 }
 
-export const useThemeFavicon = () => {
-  const { favicon } = useTheme()
-  return favicon
-}
-
 export const useThemeAnimation = () => {
   const { animation } = useTheme()
   return animation
@@ -53,7 +48,6 @@ export const useThemeState = () => {
       if (!validate(nextTheme)) set(DefaultTheme)
       if (prevTheme.name) document.body.classList.remove(prevTheme.name)
       if (nextTheme.name) document.body.classList.add(nextTheme.name)
-      setFavicon(nextTheme.favicon)
       setThemeName(nextTheme.name)
       setLocalSetting<Theme["name"]>(SettingKey.Theme, nextTheme.name)
 
@@ -82,10 +76,4 @@ export const useValidateTheme = () => {
   if (!address || !delegations) return always(true)
   const staked = calcDelegationsTotal(delegations)
   return (theme: Theme) => validateTheme(staked, theme)
-}
-
-/* favicon */
-const setFavicon = (href: string) => {
-  const favicon = document.getElementById("favicon") as HTMLLinkElement
-  favicon.href = href
 }
