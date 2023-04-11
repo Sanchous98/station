@@ -65,7 +65,7 @@ const Coins = () => {
                   <div className={styles.usdPrice}>
                     <Tag color={"success"}>
                       {"$ "}
-                      <Read amount={String(price * item.value)} auto />
+                      <Read amount={String(price * item.value)} prefix auto />
                     </Tag>
                   </div>
                 )}
