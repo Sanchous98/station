@@ -11,19 +11,15 @@ import { useBankBalance } from "data/queries/bank"
 import { useIsWalletEmpty, useTerraNativeLength } from "data/queries/bank"
 import { useActiveDenoms } from "data/queries/oracle"
 import { useMemoizedCalcValue } from "data/queries/oracle"
-import { useMemoizedPrices } from "data/queries/oracle"
 import { InternalButton, InternalLink } from "components/general"
 import { Card, Flex, Grid } from "components/layout"
 import { FormError } from "components/form"
-import { Read } from "components/token"
-import { Tag } from "components/display"
 import { ListGroup } from "components/display"
 import { isWallet } from "auth"
 import Asset from "./Asset"
 import { useBuyList } from "./Buy"
 import SelectMinimumValue from "./SelectMinimumValue"
 import { ModalButton, Mode } from "../../components/feedback"
-import styles from "./Coins.module.scss"
 
 const Coins = () => {
   const { t } = useTranslation()
@@ -32,17 +28,11 @@ const Coins = () => {
   const isWalletEmpty = useIsWalletEmpty()
   const { data: denoms, ...denomState } = useActiveDenoms()
   const coins = useCoins(denoms)
-  const currency = useCurrency()
-  const denom = currency === "uluna" ? "uusd" : currency
-  const { data: prices } = useMemoizedPrices(denom)
   const { pathname } = useLocation()
   const buyLunaList = useBuyList("Luna")
 
   const render = () => {
     if (!coins) return
-
-    if (!prices) return
-    const { uluna: price } = prices
 
     const [all, filtered] = coins
     const list = isClassic ? filtered : all
@@ -61,15 +51,15 @@ const Coins = () => {
           <section>
             {list.map(({ denom, ...item }) => (
               <div key={denom}>
-                {denom === "uluna" && (
-                  <div className={styles.usdPrice}>
-                    <Tag color={"success"}>
-                      {"$ "}
-                      <Read amount={String(price * item.value)} prefix auto />
-                    </Tag>
-                  </div>
+                {denom === "uluna" ? (
+                  <Asset
+                    {...readNativeDenom(denom, isClassic)}
+                    {...item}
+                    usdPrice={true}
+                  />
+                ) : (
+                  <Asset {...readNativeDenom(denom, isClassic)} {...item} />
                 )}
-                <Asset {...readNativeDenom(denom, isClassic)} {...item} />
               </div>
             ))}
           </section>

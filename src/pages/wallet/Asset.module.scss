@@ -48,3 +48,11 @@
   color: var(--text-muted);
   font-size: var(--font-size-small);
 }
+
+.usdPrice {
+  @include desktop {
+    position: absolute;
+    top: 20px;
+    left: 82px;
+  }
+}

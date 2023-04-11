@@ -20,19 +20,3 @@
     }
   }
 }
-
-.usdPrice {
-  @include desktop {
-    position: absolute;
-    top: 116px;
-    left: 110px;
-  }
-
-  @include mobile {
-    position: absolute;
-    top: 140px;
-    right: 22px;
-    display: flex;
-    text-align: right;
-  }
-}

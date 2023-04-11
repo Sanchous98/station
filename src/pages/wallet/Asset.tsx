@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { has } from "utils/num"
 import { WithFetching } from "components/feedback"
 import { Read, TokenIcon } from "components/token"
+import { useCurrency } from "data/settings/Currency"
+import { useMemoizedPrices } from "data/queries/oracle"
+import { Tag } from "components/display"
 import AssetActions from "./AssetActions"
 import styles from "./Asset.module.scss"
 import is from "auth/scripts/is"
@@ -11,14 +14,28 @@ export interface Props extends TokenItem, QueryState {
   balance?: Amount
   value?: Value
   hideActions?: boolean
+  usdPrice?: boolean
 }
 
 const Asset = (props: Props) => {
-  const { token, icon, symbol, balance, value, hideActions, ...restProps } =
-    props
+  const {
+    token,
+    icon,
+    symbol,
+    balance,
+    value,
+    hideActions,
+    usdPrice,
+    ...restProps
+  } = props
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { state } = useLocation()
+
+  const currency = useCurrency()
+  const denom = currency === "uluna" ? "uusd" : currency
+  const { data: prices } = useMemoizedPrices(denom)
+  const { uluna: price } = prices || {}
 
   const toSend = (tokenName: string) =>
     navigate(`/send?token=${tokenName}`, { state })
@@ -54,6 +71,21 @@ const Asset = (props: Props) => {
                 )}
               </WithFetching>
             </h2>
+
+            {usdPrice && (
+              <div className={styles.usdPrice}>
+                <Tag color={"success"}>
+                  {"$ "}
+                  {balance && (
+                    <Read
+                      amount={String(price * Number(balance))}
+                      prefix
+                      auto
+                    />
+                  )}
+                </Tag>
+              </div>
+            )}
           </div>
         </div>
       </section>
