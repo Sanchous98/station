@@ -53,14 +53,22 @@ export const useTerraAPI = <T>(path: string, params?: object, fallback?: T) => {
   )
 }
 
+export const useFCDURL = (mainnet?: true) => {
+  const network = useNetwork()
+  const networks = useNetworks()
+  const lcd = mainnet ? networks["mainnet"].lcd : network.lcd
+
+  return lcd.replace("lcd", "fcd")
+}
+
 /* fee */
 export type GasPrices = Record<Denom, Amount>
 
 export const useGasPrices = () => {
-  const current = useTerraAPIURL()
-  const mainnet = useTerraAPIURL(true)
+  const current = useFCDURL()
+  const mainnet = useFCDURL(true)
   const baseURL = current ?? mainnet
-  const path = "/gas-prices"
+  const path = "/v1/txs/gas_prices"
 
   return useQuery(
     [queryKey.TerraAPI, baseURL, path],
