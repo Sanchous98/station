@@ -129,17 +129,17 @@ const Validators = () => {
                 {t("Weighted score")}
               </Toggle>
             </TooltipIcon>
-            <TooltipIcon
-              className={styles.tooltip_spacer}
-              content={<span>Show delegated validators only</span>}
-            >
-              <Toggle
-                checked={byDelegated}
-                onChange={() => setByDelegated(!byDelegated)}
-              >
-                {t("Delegated only")}
-              </Toggle>
-            </TooltipIcon>
+            {/*<TooltipIcon*/}
+            {/*  className={styles.tooltip_spacer}*/}
+            {/*  content={<span>Show delegated validators only</span>}*/}
+            {/*>*/}
+            {/*  <Toggle*/}
+            {/*    checked={byDelegated}*/}
+            {/*    onChange={() => setByDelegated(!byDelegated)}*/}
+            {/*  >*/}
+            {/*    {t("Delegated only")}*/}
+            {/*  </Toggle>*/}
+            {/*</TooltipIcon>*/}
           </section>
         )}
 
