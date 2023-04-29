@@ -9,8 +9,8 @@ const Links = () => {
   const { t } = useTranslation()
 
   const community = {
-    discord: "https://discord.gg/K6Yd8xhYTF",
-    telegram: "https://t.me/OfficialTerraRebels",
+    // discord: "https://discord.gg/K6Yd8xhYTF",
+    // telegram: "https://t.me/OfficialTerraRebels",
     twitter: "https://twitter.com/TerraRebels",
     github: "https://github.com/terra-rebels",
   }
