@@ -42,4 +42,5 @@ export const CLASSIC_CHAIN_IDS = [
   "rebel-2",
   "rogue-1",
   "rogue-2",
+  "bajor-1",
 ]
