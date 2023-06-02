@@ -10,9 +10,11 @@ const ValidatorButton = () => {
   if (!moniker) return null
 
   return (
-    <LinkButton to="/commission" size="small" outline>
-      {moniker}
-    </LinkButton>
+    <button>
+      <LinkButton to="/commission" size="small" outline>
+        {moniker}
+      </LinkButton>
+    </button>
   )
 }
 
