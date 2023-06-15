@@ -28,6 +28,7 @@ jobs:
         projectName: rebel-station-mobile
         directory: ./build
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        branch: mobile
     # - name: Deploy to S3
       # uses: jakejarvis/s3-sync-action@v0.5.1
       # with:
