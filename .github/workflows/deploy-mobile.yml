@@ -21,13 +21,14 @@ jobs:
     - name: Building project
       run: npm run build
     - name: Publish to Cloudflare Pages
-      uses: cloudflare/pages-action@v1
+      uses: cloudflare/pages-action@v1.5.0
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         projectName: rebel-station-mobile
         directory: ./build
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        wranglerVersion: '3'
         branch: mobile
     # - name: Deploy to S3
       # uses: jakejarvis/s3-sync-action@v0.5.1
