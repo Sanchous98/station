@@ -26,10 +26,10 @@ export enum AggregateWallets {
   ACTIVE = "active",
 }
 
-export const useTerraAPIURL = (mainnet?: true) => {
+export const useTerraAPIURL = () => {
   const network = useNetwork()
   const networks = useNetworks()
-  return mainnet ? networks["mainnet"].api : network.api
+  return network.api || networks[network.name].api || networks["mainnet"].api
 }
 
 export const useIsTerraAPIAvailable = () => {
