@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useForm } from "react-hook-form"
-import { AccAddress, MsgUpdateContractAdmin } from "@terra-rebels/terra.js"
+import { AccAddress, MsgUpdateAdmin } from "@terra-rebels/terra.js"
 import { useAddress } from "data/wallet"
 import { useBankBalance } from "data/queries/bank"
 import { Form, FormItem } from "components/form"
@@ -32,7 +32,7 @@ const UpdateAdminContractForm = ({ contract }: { contract: AccAddress }) => {
   const createTx = useCallback(
     ({ new_admin }: TxValues) => {
       if (!address || !new_admin) return
-      const msgs = [new MsgUpdateContractAdmin(address, new_admin, contract)]
+      const msgs = [new MsgUpdateAdmin(address, new_admin, contract)]
       return { msgs }
     },
     [address, contract]
