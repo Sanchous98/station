@@ -123,7 +123,7 @@ export interface TxResponse<T = any> {
 export const getIsNativeMsgFromExternal = (origin: string) => {
   return (msg: Msg) => {
     if (origin.includes("https://station.terra.money")) return false
-    return msg.toData()["@type"] !== "/terra.wasm.v1beta1.MsgExecuteContract"
+    return msg.toData()["@type"] !== "/cosmwasm.wasm.v1.MsgExecuteContract"
   }
 }
 
@@ -133,20 +133,17 @@ export const parseDefault = (
   return { ...request, timestamp: new Date(request.id) }
 }
 
-export const parseTx = (
-  request: PrimitiveTxRequest,
-  isClassic: boolean
-): TxRequest["tx"] => {
+export const parseTx = (request: PrimitiveTxRequest): TxRequest["tx"] => {
   const { msgs, fee, memo } = request
   const isProto = "@type" in JSON.parse(msgs[0])
   return isProto
     ? {
-        msgs: msgs.map((msg) => Msg.fromData(JSON.parse(msg), isClassic)),
+        msgs: msgs.map((msg) => Msg.fromData(JSON.parse(msg))),
         fee: fee ? Fee.fromData(JSON.parse(fee)) : undefined,
         memo,
       }
     : {
-        msgs: msgs.map((msg) => Msg.fromAmino(JSON.parse(msg), isClassic)),
+        msgs: msgs.map((msg) => Msg.fromAmino(JSON.parse(msg))),
         fee: fee ? Fee.fromAmino(JSON.parse(fee)) : undefined,
         memo,
       }

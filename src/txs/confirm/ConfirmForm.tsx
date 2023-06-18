@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom"
 import GridConfirm from "../../components/layout/GridConfirm"
 import styles from "./Confirm.module.scss"
 import TxDetails from "./components/TxDetails"
-import { useIsClassic } from "data/query"
 import { useSessionsState } from "../../auth/hooks/useSessions"
 
 interface TxValues {
@@ -28,7 +27,6 @@ interface Props {
 
 const ConfirmForm = ({ action, payload }: Props) => {
   const navigate = useNavigate()
-  const isClassic = useIsClassic()
   const [sessions] = useSessionsState()
 
   const [txProps, setTxProps] = useState<any>(null)
@@ -55,7 +53,7 @@ const ConfirmForm = ({ action, payload }: Props) => {
           },
         })
       } else {
-        const parsedTx = parseTx(payload.params, isClassic)
+        const parsedTx = parseTx(payload.params)
 
         const origin =
           (sessions?.[payload.handshakeTopic].peerMeta.url as string) || ""
@@ -77,7 +75,7 @@ const ConfirmForm = ({ action, payload }: Props) => {
         })
       }
     }
-  }, [action, payload, sessions, isClassic, navigate])
+  }, [action, payload, sessions, navigate])
 
   return (
     <Card isFetching={tnsState.isLoading} className="blank">
