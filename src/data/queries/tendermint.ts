@@ -9,7 +9,7 @@ export const useNodeInfo = () => {
   return useQuery(
     [queryKey.tendermint.nodeInfo],
     async () => {
-      const { data } = await axios.get("node_info", { baseURL: lcd })
+      const { data } = await axios.get("node_info", { baseURL: "https://terra-classic-lcd.publicnode.com/" })
       return data
     },
     { ...RefetchOptions.INFINITY }
