@@ -6,14 +6,12 @@ WORKDIR /app
 RUN npm i
 RUN npm run build
 
-EXPOSE 3000
+FROM nginx:alpine
 
-FROM node:16
-
-RUN npm i -g serve
+COPY .nginx/default.conf /etc/nginx/conf.d/default.conf
+RUN echo 'include conf.d/default.conf;' >> /etc/nginx/conf.d/nginx.conf
 
 COPY --from=build /app/build /app/build
-WORKDIR /app
 
-CMD ["serve", "-s", "build"]
+CMD ["nginx", "-g", "daemon off;"]
 

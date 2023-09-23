@@ -1,7 +1,25 @@
-version: '3'
-
+name: terra-station-legacy
 services:
-  node:
-    image: ghcr.io/sanchous98/station-terra-legacy:0.1
-    ports:
-      - "3000:3000"
+  main_app:
+    cpu_shares: 10
+    container_name: terra-station
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    image: ghcr.io/sanchous98/terra-station-legacy:latest
+    labels:
+      icon: https://raw.githubusercontent.com/Sanchous98/station/main/public/favicon.svg
+    restart: unless-stopped
+    ports: ["3000:80"]
+x-casaos:
+  author: Sanchous98
+  category: Crypto DApp
+  hostname: ""
+  icon: https://raw.githubusercontent.com/Sanchous98/station/main/public/favicon.svg
+  index: /
+  port_map: "3000"
+  scheme: http
+  store_app_id: terra-station-legacy
+  title:
+    custom: Terra Station Legacy
