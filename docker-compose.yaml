@@ -2,6 +2,6 @@ version: '3'
 
 services:
   node:
-    build: .
+    image: ghcr.io/sanchous98/station-terra-legacy:0.1
     ports:
       - "3000:3000"
