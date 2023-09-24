@@ -5,23 +5,17 @@ export const LAZY_LIMIT = 999
 export const BRIDGE = "https://walletconnect.terrarebels.net"
 
 /* api */
-export const ASSETS = "https://assets.terrarebels.net"
+export const ASSETS = "https://station-assets.terraclassic.community/"
 export const OBSERVER = "wss://observer.terra.dev"
 
 /* website */
-export const STATION = "https://station.terrarebels.net"
-export const FINDER = "https://finder.terrarebels.net"
-export const EXTENSION =
-  "https://chrome.google.com/webstore/detail/akckefnapafjbpphkefbpkpcamkoaoai"
-export const TUTORIAL = "https://www.terrarebels.net/guides"
+export const STATION = "https://station.terraclassic.community/"
+export const FINDER = "https://finder.terraclassic.community/"
 export const FORUMS = "https://forums.terrarebels.net"
 
 /* website: stake */
 export const TERRA_VALIDATORS =
   "https://github.com/terra-money/validator-profiles/tree/master/validators/"
-
-export const STAKE_ID = "https://stake.id/#/validator/"
-
 /* ledger */
 export const LEDGER_TRANSPORT_TIMEOUT = 120000
 

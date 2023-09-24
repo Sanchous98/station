@@ -29,13 +29,7 @@ export enum AggregateWallets {
 export const useTerraAPIURL = () => {
   const network = useNetwork()
   const networks = useNetworks()
-  const api = network.api || networks[network.name].api || networks["mainnet"].api
-
-  if (api === undefined) {
-    return api
-  }
-
-  return api.replace("api.terrarebels.net", "api.terraclassic.community")
+  return network.api || networks[network.name].api || networks["mainnet"].api
 }
 
 export const useIsTerraAPIAvailable = () => {

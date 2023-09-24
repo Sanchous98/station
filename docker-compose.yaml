@@ -7,11 +7,11 @@ services:
       resources:
         limits:
           memory: 256M
-    image: ghcr.io/sanchous98/terra-station-legacy:latest
+    image: ghcr.io/sanchous98/terra-station-legacy:0.4
     labels:
       icon: https://raw.githubusercontent.com/Sanchous98/station/main/public/favicon.svg
     restart: unless-stopped
-    ports: ["3000:80"]
+    ports: ["3000:3000"]
 x-casaos:
   author: Sanchous98
   category: Crypto DApp
