@@ -20,7 +20,7 @@ const Nav = () => {
     <nav>
       <header className={styles.header}>
         <NavLink to="/" className={classNames(styles.item, styles.logo)}>
-          <strong>Rebel</strong> Station
+          <strong>Terra</strong> Station Legacy
         </NavLink>
 
         <button className={styles.toggle} onClick={toggle}>

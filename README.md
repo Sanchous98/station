@@ -1,10 +1,10 @@
-# Rebel Station
+# Terra Station Legacy
 
 ![Banner](Banner.png)
 
-**Rebel Station** is a web application to interact with [Terra Core](https://github.com/terra-rebels/classic).
+**Terra Station Legacy** is a web application to interact with [Terra Core](https://github.com/terra-rebels/classic).
 
-Rebel Station allows users to:
+Terra Station Legacy allows users to:
 
 - View key macroeconomic metrics for Terra.
 - View the balances and values of coins and tokens held in the connected wallet.
@@ -19,11 +19,11 @@ Rebel Station allows users to:
 - Upload and instantiate new contracts and query from and execute messages to existing contracts.
 - Deposit and withdraw UST from Anchor Protocol.
 
-## Running Rebel Station
+## Running Terra Station Legacy
 
 This project was bootstrapped with [Create React App](https://create-react-app.dev/).
 
-Run Rebel Station with the following commands:
+Run Terra Station Legacy with the following commands:
 
 ```
 git clone https://github.com/terra-rebels/station.git
