@@ -1,5 +1,10 @@
 name: terra-station-legacy
 services:
+  node:
+    image: node:16
+    working_dir: /app
+    volumes:
+      - .:/app:delegated
   main_app:
     cpu_shares: 10
     container_name: terra-station
@@ -7,7 +12,7 @@ services:
       resources:
         limits:
           memory: 256M
-    image: ghcr.io/sanchous98/terra-station-legacy:0.4
+    image: ghcr.io/sanchous98/terra-station-legacy:latest
     labels:
       icon: https://raw.githubusercontent.com/Sanchous98/station/main/public/favicon.svg
     restart: unless-stopped

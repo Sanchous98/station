@@ -22,7 +22,7 @@ const TxContext = ({ children }: PropsWithChildren<{}>) => {
       <Wrong>{t("Transaction is not available at the moment")}</Wrong>
     </Card>
   )
-
+console.log(gasPrices)
   // If the gas prices doesn't exist, nothing is worth rendering.
   if (!gasPrices) return null
 

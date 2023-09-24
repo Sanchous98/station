@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { isDenomIBC, isDenomTerra } from "@terra-rebels/kitchen-utils"
 import { readDenom, truncate } from "@terra-rebels/kitchen-utils"
 import { AccAddress } from "@terra-rebels/terra.js"
-import { ASSETS } from "config/constants"
+import { ASSETS_DEV } from "config/constants"
 import { useIsClassic } from "./query"
 import { useIBCBaseDenom } from "./queries/ibc"
 import { useTokenInfoCW20 } from "./queries/wasm"
@@ -68,7 +68,7 @@ export const WithTokenItem = ({ token, children }: Props) => {
 }
 
 /* helpers */
-export const getIcon = (path: string) => `${ASSETS}/icon/svg/${path}`
+export const getIcon = (path: string) => `${ASSETS_DEV}/icon/svg/${path}`
 
 export const readNativeDenom = (
   denom: Denom,
@@ -78,7 +78,7 @@ export const readNativeDenom = (
   const symbolClassic = denom === "uluna" ? "LUNC" : symbol
 
   const path = isDenomTerra(denom)
-    ? `Terra/${symbol}.svg`
+    ? `${symbol}.svg`
     : isClassic
     ? "LUNC.svg"
     : "Luna.svg"

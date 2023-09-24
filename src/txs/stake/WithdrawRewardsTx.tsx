@@ -35,7 +35,7 @@ const WithdrawRewardsTx = () => {
     if (!(rewards && delegations && validators && IBCWhitelist)) return null
 
     const { total } = calcRewardsValues(rewards, currency, calcValue)
-    const hasRewards = !!has(total.sum)
+    const hasRewards = has(total.sum)
     const hasDelegations = !!delegations.length
 
     if (!hasRewards)

@@ -40,5 +40,6 @@ export const Languages = {
 
 i18n.use(LanguageDetector).use(initReactI18next).init({
   resources: Languages,
-  debug: !!debug.translation,
+  debug: debug.translation,
 })
+

@@ -1,14 +1,12 @@
-import { useMemo } from "react"
-import { useQuery } from "react-query"
-import axios, { AxiosError } from "axios"
+import {useMemo} from "react"
+import {useQuery} from "react-query"
+import axios, {AxiosError} from "axios"
 import BigNumber from "bignumber.js"
-import { OracleParams, ValAddress } from "@terra-rebels/terra.js"
-import { TerraValidator } from "types/validator"
-import { TerraProposalItem } from "types/proposal"
-import { useNetwork } from "data/wallet"
-import { useOracleParams } from "data/queries/oracle"
-import { useNetworks } from "app/InitNetworks"
-import { queryKey, RefetchOptions } from "../query"
+import {ValAddress} from "@terra-rebels/terra.js"
+import {TerraValidator} from "types/validator"
+import {TerraProposalItem} from "types/proposal"
+import {queryKey, RefetchOptions} from "../query"
+import {API} from "../../config/constants";
 
 export enum Aggregate {
   PERIODIC = "periodic",
@@ -26,16 +24,8 @@ export enum AggregateWallets {
   ACTIVE = "active",
 }
 
-export const useTerraAPIURL = () => {
-  const network = useNetwork()
-  const networks = useNetworks()
-  return network.api || networks[network.name].api || networks["mainnet"].api
-}
-
-export const useIsTerraAPIAvailable = () => {
-  const url = useTerraAPIURL()
-  return !!url
-}
+export const useTerraAPIURL = () => API
+export const useIsTerraAPIAvailable = () => true
 
 export const useTerraAPI = <T>(path: string, params?: object, fallback?: T) => {
   const baseURL = useTerraAPIURL()
@@ -53,30 +43,20 @@ export const useTerraAPI = <T>(path: string, params?: object, fallback?: T) => {
   )
 }
 
-export const useFCDURL = (mainnet?: true) => {
-  const network = useNetwork()
-  const networks = useNetworks()
-  const lcd = mainnet ? networks["mainnet"].lcd : network.lcd
-
-  return lcd.replace("lcd", "fcd")
-}
-
 /* fee */
 export type GasPrices = Record<Denom, Amount>
 
 export const useGasPrices = () => {
-  const current = useFCDURL()
-  const mainnet = useFCDURL(true)
-  const baseURL = current ?? mainnet
-  const path = "/v1/txs/gas_prices"
+  const baseURL = useTerraAPIURL()
+  const path = "/gas-prices"
 
   return useQuery(
-    [queryKey.TerraAPI, baseURL, path],
-    async () => {
-      const { data } = await axios.get<GasPrices>(path, { baseURL })
-      return data
-    },
-    { ...RefetchOptions.INFINITY, enabled: !!baseURL }
+      [queryKey.TerraAPI, baseURL, path],
+      async () => {
+        const { data } = await axios.get<GasPrices>(path, { baseURL })
+        return data
+      },
+      { ...RefetchOptions.INFINITY, enabled: !!baseURL }
   )
 }
 
@@ -149,15 +129,6 @@ export const calcSelfDelegation = (validator?: TerraValidator) => {
   const { self, tokens } = validator
   return self ? Number(self) / Number(tokens) : undefined
 }
-
-export const getCalcUptime = ({ slash_window }: OracleParams) => {
-  return (validator?: TerraValidator) => {
-    if (!validator) return
-    const { miss_counter } = validator
-    return miss_counter ? 1 - Number(miss_counter) / slash_window : undefined
-  }
-}
-
 export const useVotingPowerRate = (address: ValAddress) => {
   const { data: TerraValidators, ...state } = useTerraValidators()
   const calcRate = useMemo(() => {
@@ -169,22 +140,6 @@ export const useVotingPowerRate = (address: ValAddress) => {
     if (!calcRate) return
     return calcRate(address)
   }, [address, calcRate])
-
-  return { data, ...state }
-}
-
-export const useUptime = (validator: TerraValidator) => {
-  const { data: oracleParams, ...state } = useOracleParams()
-
-  const calc = useMemo(() => {
-    if (!oracleParams) return
-    return getCalcUptime(oracleParams)
-  }, [oracleParams])
-
-  const data = useMemo(() => {
-    if (!calc) return
-    return calc(validator)
-  }, [calc, validator])
 
   return { data, ...state }
 }
