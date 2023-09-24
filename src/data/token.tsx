@@ -78,7 +78,7 @@ export const readNativeDenom = (
   const symbolClassic = denom === "uluna" ? "LUNC" : symbol
 
   const path = isDenomTerra(denom)
-    ? `${symbol}.svg`
+    ? `Terra/${symbol}.svg`
     : isClassic
     ? "LUNC.svg"
     : "Luna.svg"

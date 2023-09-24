@@ -1,10 +1,5 @@
 name: terra-station-legacy
 services:
-  node:
-    image: node:16
-    working_dir: /app
-    volumes:
-      - .:/app:delegated
   main_app:
     cpu_shares: 10
     container_name: terra-station
