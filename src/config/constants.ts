@@ -2,23 +2,23 @@
 export const LAZY_LIMIT = 999
 
 /* connection */
-export const BRIDGE = "https://walletconnect.terrarebels.net"
+export const BRIDGE = "https://walletconnect.terra.dev"
 
 /* api */
-export const ASSETS = "https://assets.terraclassic.community"
-export const STATION_ASSETS = "https://station-assets.terraclassic.community"
-export const ASSETS_DEV = "https://assets.terra.dev"
+export const ASSETS = "https://assets.hexxagon.io"
+export const STATION_ASSETS = "https://station-assets.hexxagon.io"
 export const OBSERVER = "wss://observer.terra.dev"
+export const ASSETS_DEV = "https://assets.terra.dev"
 
 /* website */
-export const STATION = "https://station.terraclassic.community/"
-export const FINDER = "https://finder.terraclassic.community/"
-export const FORUMS = "https://forums.terrarebels.net"
+export const STATION = "https://station.hexxagon.io"
+export const FINDER = "https://finder.hexxagon.io"
+export const FORUMS = "https://forums.hexxagon.io"
 
 export const API = "https://api.terraclassic.community"
 
 /* website: stake */
-export const TERRA_VALIDATORS = "https://github.com/terra-money/validator-profiles/tree/master/validators/"
+export const TERRA_VALIDATORS = "https://github.com/hexxagon-io/validator-profiles/tree/master/validators/"
 /* ledger */
 export const LEDGER_TRANSPORT_TIMEOUT = 120000
 /* tx */

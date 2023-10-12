@@ -1,0 +1,19 @@
+Subject: [PATCH] Patch terra-rebels wallet controller
+---
+Index: node_modules/@terra-rebels/wallet-controller/getChainOptions.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/node_modules/@terra-rebels/wallet-controller/getChainOptions.js b/node_modules/@terra-rebels/wallet-controller/getChainOptions.js
+--- a/node_modules/@terra-rebels/wallet-controller/getChainOptions.js	(revision 27c0139e672b2c8cc70020a9631efd6c4c24e30b)
++++ b/node_modules/@terra-rebels/wallet-controller/getChainOptions.js	(date 1697144985276)
+@@ -21,7 +21,7 @@
+ };
+ let cache;
+ export async function getChainOptions() {
+-    return fetch('https://assets.terrarebels.net/chains.json')
++    return fetch('https://station-assets.hexxagon.io/chains.json')
+         .then((res) => res.json())
+         .then((data) => {
+         const chains = Object.values(data);

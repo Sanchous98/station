@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useState } from "react"
 import { fromPairs } from "ramda"
 import axios from "axios"
-import {STATION_ASSETS} from "config/constants"
+import {ASSETS} from "config/constants"
 import createContext from "utils/createContext"
 import { useCustomNetworks } from "data/settings/CustomNetworks"
 
@@ -15,7 +15,7 @@ const InitNetworks = ({ children }: PropsWithChildren<{}>) => {
   useEffect(() => {
     const fetchChains = async () => {
       const { data: chains } = await axios.get<TerraNetworks>("/chains.json", {
-        baseURL: STATION_ASSETS,
+        baseURL: ASSETS,
       })
 
       const networks = {

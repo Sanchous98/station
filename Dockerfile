@@ -4,6 +4,7 @@ COPY . /app
 WORKDIR /app
 
 RUN npm i
+RUN #git apply --whitespace=fix --reject /app/.patches/*.patch
 RUN npm run build
 
 EXPOSE 3000

@@ -21,25 +21,26 @@ import App from "app/App"
 
 const connectorOpts = { bridge: BRIDGE }
 
-getChainOptions().then((chainOptions) =>
-  render(
-    <StrictMode>
-      <RecoilRoot>
-        <BrowserRouter>
-          <ScrollToTop />
-          <WalletProvider {...chainOptions} connectorOpts={connectorOpts}>
-            <InitNetworks>
-              <InitWallet>
-                <InitTheme />
-                <ElectronVersion />
-                <App />
-              </InitWallet>
-            </InitNetworks>
-          </WalletProvider>
-          {debug.query && <ReactQueryDevtools position="bottom-right" />}
-        </BrowserRouter>
-      </RecoilRoot>
-    </StrictMode>,
-    document.getElementById("station")
+getChainOptions().then((chainOptions) => {
+  console.log(chainOptions)
+  return render(
+      <StrictMode>
+        <RecoilRoot>
+          <BrowserRouter>
+            <ScrollToTop />
+            <WalletProvider {...chainOptions} connectorOpts={connectorOpts}>
+              <InitNetworks>
+                <InitWallet>
+                  <InitTheme />
+                  <ElectronVersion />
+                  <App />
+                </InitWallet>
+              </InitNetworks>
+            </WalletProvider>
+            {debug.query && <ReactQueryDevtools position="bottom-right" />}
+          </BrowserRouter>
+        </RecoilRoot>
+      </StrictMode>,
+      document.getElementById("station")
   )
-)
+})
