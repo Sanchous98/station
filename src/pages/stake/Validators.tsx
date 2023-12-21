@@ -16,7 +16,6 @@ import { TooltipIcon } from "components/display"
 import { Toggle } from "components/form"
 import WithSearchInput from "pages/custom/WithSearchInput"
 import ProfileIcon from "./components/ProfileIcon"
-// import Uptime from "./components/Uptime"
 import { ValidatorJailed } from "./components/ValidatorTag"
 import styles from "./Validators.module.scss"
 
@@ -36,13 +35,23 @@ const Validators = () => {
 
   const [byDelegated, setByDelegated] = useState(false)
 
+  const isDelegated = useCallback(
+      (operator_address: string) => {
+        return delegations?.find(
+            ({ validator_address }) => validator_address === operator_address
+        )
+      },
+      [delegations]
+  )
+
   const activeValidators = useMemo(() => {
     if (!validators) return null
     const priorityVals = getPriorityVals(validators)
     const calcRate = getCalcVotingPowerRate(validators)
 
     const sortedValidators = validators
-        .filter(({ status }) => !getIsUnbonded(status))
+        .filter(({ status, operator_address }) => !getIsUnbonded(status) &&
+          (!byDelegated ? true : isDelegated(operator_address)))
         .map((validator) => {
           const { operator_address } = validator
           const voting_power_rate = calcRate(operator_address)
@@ -65,7 +74,7 @@ const Validators = () => {
     )
 
     return sortedValidators
-  }, [validators])
+  }, [byDelegated, isDelegated, validators])
 
   const renderCount = () => {
     if (!validators) return null
