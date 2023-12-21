@@ -22,7 +22,6 @@ import App from "app/App"
 const connectorOpts = { bridge: BRIDGE }
 
 getChainOptions().then((chainOptions) => {
-  console.log(chainOptions)
   return render(
       <StrictMode>
         <RecoilRoot>

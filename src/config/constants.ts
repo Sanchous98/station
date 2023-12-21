@@ -15,7 +15,7 @@ export const STATION = "https://station.hexxagon.io"
 export const FINDER = "https://finder.hexxagon.io"
 export const FORUMS = "https://forums.hexxagon.io"
 
-export const API = "https://api.terraclassic.community"
+export const API = "https://terra-classic-public-api.publicnode.com"
 
 /* website: stake */
 export const TERRA_VALIDATORS = "https://github.com/hexxagon-io/validator-profiles/tree/master/validators/"

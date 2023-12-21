@@ -1,13 +1,16 @@
-FROM node:16 as build
+FROM node:16 as dev
 
 COPY . /app
 WORKDIR /app
 
 RUN npm i
-RUN #git apply --whitespace=fix --reject /app/.patches/*.patch
-RUN npm run build
-
 EXPOSE 3000
+
+CMD ["npm", "run", "start"]
+
+FROM dev as build
+
+RUN npm run build
 
 FROM node:alpine
 
@@ -15,6 +18,8 @@ RUN npm i -g serve
 
 COPY --from=build /app/build /app/build
 WORKDIR /app
+
+EXPOSE 3000
 
 CMD ["serve", "-s", "build"]
 

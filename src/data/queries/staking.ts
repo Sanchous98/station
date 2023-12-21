@@ -3,42 +3,41 @@ import { flatten, path, uniqBy } from "ramda"
 import BigNumber from "bignumber.js"
 import { AccAddress, ValAddress, Validator } from "@terra-rebels/terra.js"
 import { Delegation, UnbondingDelegation } from "@terra-rebels/terra.js"
-/* FIXME(terra.js): Import from terra.js */
-import { BondStatus } from "@terra-money/terra.proto/cosmos/staking/v1beta1/staking"
 import { has } from "utils/num"
 import { StakeAction } from "txs/stake/StakeForm"
 import { queryKey, Pagination, RefetchOptions } from "../query"
 import { useAddress } from "../wallet"
 import { useLCDClient } from "./lcdClient"
+import {BondStatus} from "@terra-money/terra.proto/cosmos/staking/v1beta1/staking";
 
-export const useValidators = () => {
-  const lcd = useLCDClient()
+export const useValidators = (chainID?: string) => {
+    const lcd = useLCDClient();
 
-  return useQuery(
-    [queryKey.staking.validators],
-    async () => {
-      // TODO: Pagination
-      // Required when the number of results exceed LAZY_LIMIT
+    return useQuery(
+        [queryKey.staking.validators],
+        async () => {
+            // TODO: Pagination
+            // Required when the number of results exceed LAZY_LIMIT
 
-      const [v1] = await lcd.staking.validators({
-        status: BondStatus[BondStatus.BOND_STATUS_UNBONDED],
-        ...Pagination,
-      })
+            const [v1] = await lcd.staking.validators({
+                status: BondStatus[BondStatus.BOND_STATUS_UNBONDED],
+                ...Pagination,
+            })
 
-      const [v2] = await lcd.staking.validators({
-        status: BondStatus[BondStatus.BOND_STATUS_UNBONDING],
-        ...Pagination,
-      })
+            const [v2] = await lcd.staking.validators({
+                status: BondStatus[BondStatus.BOND_STATUS_UNBONDING],
+                ...Pagination,
+            })
 
-      const [v3] = await lcd.staking.validators({
-        status: BondStatus[BondStatus.BOND_STATUS_BONDED],
-        ...Pagination,
-      })
+            const [v3] = await lcd.staking.validators({
+                status: BondStatus[BondStatus.BOND_STATUS_BONDED],
+                ...Pagination,
+            })
 
-      return uniqBy(path(["operator_address"]), [...v1, ...v2, ...v3])
-    },
-    { ...RefetchOptions.INFINITY }
-  )
+            return uniqBy(path(["operator_address"]), [...v1, ...v2, ...v3])
+        },
+        { ...RefetchOptions.INFINITY }
+    )
 }
 
 export const useValidator = (operatorAddress: ValAddress) => {

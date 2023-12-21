@@ -2,11 +2,13 @@ import {useMemo} from "react"
 import {useQuery} from "react-query"
 import axios, {AxiosError} from "axios"
 import BigNumber from "bignumber.js"
-import {ValAddress} from "@terra-rebels/terra.js"
+import {ValAddress, Validator} from "@terra-rebels/terra.js"
 import {TerraValidator} from "types/validator"
 import {TerraProposalItem} from "types/proposal"
 import {queryKey, RefetchOptions} from "../query"
 import {API} from "../../config/constants";
+import {useValidators} from "../queries/staking";
+import {getIsBonded} from "../../pages/stake/Validators";
 
 export enum Aggregate {
   PERIODIC = "periodic",
@@ -108,19 +110,59 @@ export const useTerraProposal = (id: number) => {
 }
 
 /* helpers */
-export const getCalcVotingPowerRate = (TerraValidators: TerraValidator[]) => {
+export const getPriorityVals = (validators: Validator[]) => {
+  const MAX_COMMISSION = 0.05
+  const VOTE_POWER_INCLUDE = 0.65
+
+  const totalStaked = getTotalStakedTokens(validators)
+  const getVotePower = (v: Validator) => Number(v.tokens) / totalStaked
+
+  return validators
+      .sort((a, b) => getVotePower(a) - getVotePower(b)) // least to greatest
+      .reduce(
+          (acc, cur) => {
+            acc.sumVotePower += getVotePower(cur)
+            if (acc.sumVotePower < VOTE_POWER_INCLUDE) acc.elgible.push(cur)
+            return acc
+          },
+          {
+            sumVotePower: 0,
+            elgible: [] as Validator[],
+          }
+      )
+      .elgible.filter(
+          ({ commission, status }) =>
+              getIsBonded(status) &&
+              Number(commission.commission_rates.rate) <= MAX_COMMISSION
+      )
+      .map(({ operator_address }) => operator_address)
+}
+
+export const getTotalStakedTokens = (validators: Validator[]) => {
+  return BigNumber.sum(
+      ...validators.map(({ tokens = 0 }) => Number(tokens))
+  ).toNumber()
+}
+
+export const getCalcVotingPowerRate = (validators: Validator[]) => {
   const total = BigNumber.sum(
-    ...TerraValidators.map(({ voting_power = 0 }) => voting_power)
+      ...validators
+          .filter(
+              ({ status }) => (status as unknown as string) === "BOND_STATUS_BONDED"
+          )
+          .map(({ tokens }) => tokens.toString())
   ).toNumber()
 
   return (address: ValAddress) => {
-    const validator = TerraValidators.find(
-      ({ operator_address }) => operator_address === address
+    const validator = validators.find(
+        ({ operator_address }) => operator_address === address
     )
 
     if (!validator) return
-    const { voting_power } = validator
-    return voting_power ? Number(validator.voting_power) / total : undefined
+    const { tokens, status } = validator
+    return (status as unknown as string) === "BOND_STATUS_BONDED"
+        ? Number(tokens ?? 0) / total
+        : 0
   }
 }
 
@@ -130,7 +172,7 @@ export const calcSelfDelegation = (validator?: TerraValidator) => {
   return self ? Number(self) / Number(tokens) : undefined
 }
 export const useVotingPowerRate = (address: ValAddress) => {
-  const { data: TerraValidators, ...state } = useTerraValidators()
+  const { data: TerraValidators, ...state } = useValidators()
   const calcRate = useMemo(() => {
     if (!TerraValidators) return
     return getCalcVotingPowerRate(TerraValidators)

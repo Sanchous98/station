@@ -10,12 +10,10 @@ import { bondStatusFromJSON } from "@terra-money/terra.proto/cosmos/staking/v1be
 import { combineState, useIsClassic } from "data/query"
 import { useValidators } from "data/queries/staking"
 import { useDelegations, useUnbondings } from "data/queries/staking"
-import { getCalcVotingPowerRate } from "data/Terra/TerraAPI"
-import { useTerraValidators } from "data/Terra/TerraAPI"
+import {getCalcVotingPowerRate, getPriorityVals} from "data/Terra/TerraAPI"
 import { Page, Card, Table, Flex, Grid } from "components/layout"
 import { TooltipIcon } from "components/display"
 import { Toggle } from "components/form"
-import { Read } from "components/token"
 import WithSearchInput from "pages/custom/WithSearchInput"
 import ProfileIcon from "./components/ProfileIcon"
 // import Uptime from "./components/Uptime"
@@ -29,60 +27,45 @@ const Validators = () => {
   const { data: validators, ...validatorsState } = useValidators()
   const { data: delegations, ...delegationsState } = useDelegations()
   const { data: undelegations, ...undelegationsState } = useUnbondings()
-  const { data: TerraValidators, ...TerraValidatorsState } =
-    useTerraValidators()
 
   const state = combineState(
     validatorsState,
     delegationsState,
     undelegationsState,
-    TerraValidatorsState
   )
-
+console.log(validators?.filter(validator => validator.description.identity !== ""))
   const [byDelegated, setByDelegated] = useState(false)
 
-  const isDelegated = useCallback(
-    (operator_address: string) => {
-      return delegations?.find(
-        ({ validator_address }) => validator_address === operator_address
-      )
-    },
-    [delegations]
-  )
-
   const activeValidators = useMemo(() => {
-    if (!(validators && TerraValidators)) return null
+    if (!validators) return null
+    const priorityVals = getPriorityVals(validators)
+    const calcRate = getCalcVotingPowerRate(validators)
 
-    const calcRate = getCalcVotingPowerRate(TerraValidators)
+    const sortedValidators = validators
+        .filter(({ status }) => !getIsUnbonded(status))
+        .map((validator) => {
+          const { operator_address } = validator
+          const voting_power_rate = calcRate(operator_address)
+          return {
+            ...validator,
+            rank:
+                (priorityVals.includes(operator_address) ? 1 : 0) + Math.random(),
+            voting_power_rate,
+          }
+        })
+        .sort((a, b) => b.rank - a.rank)
 
-    return validators
-      .filter(({ status, operator_address }) => {
-        return (
-          !getIsUnbonded(status) &&
-          (byDelegated === false ? true : isDelegated(operator_address))
-        )
-      })
-      .map((validator) => {
-        const { operator_address } = validator
+    sortedValidators.unshift(
+        sortedValidators.splice(
+            sortedValidators.findIndex(
+                (item) => item.description.moniker.toLowerCase() === "hexxagon"
+            ),
+            1
+        )[0]
+    )
 
-        const indexOfTerraValidator = TerraValidators.findIndex(
-          (validator) => validator.operator_address === operator_address
-        )
-
-        const TerraValidator = TerraValidators[indexOfTerraValidator]
-
-        const rank = indexOfTerraValidator + 1
-        const voting_power_rate = calcRate(operator_address)
-
-        return {
-          ...TerraValidator,
-          ...validator,
-          rank,
-          voting_power_rate,
-        }
-      })
-      .sort(({ rank: a }, { rank: b }) => a - b)
-  }, [TerraValidators, byDelegated, isDelegated, validators])
+    return sortedValidators
+  }, [validators])
 
   const renderCount = () => {
     if (!validators) return null
@@ -148,10 +131,8 @@ const Validators = () => {
           dataSource={activeValidators}
           filter={({ description: { moniker }, operator_address }) => {
             if (!keyword) return true
-            if (moniker.toLowerCase().includes(keyword.toLowerCase()))
-              return true
-            if (operator_address === keyword) return true
-            return false
+            if (moniker.toLowerCase().includes(keyword.toLowerCase()))  return true
+            return operator_address === keyword
           }}
           sorter={(a, b) => Number(a.jailed) - Number(b.jailed)}
           rowKey={({ operator_address }) => operator_address}
@@ -164,7 +145,6 @@ const Validators = () => {
                 a.moniker.localeCompare(b.moniker),
               render: (moniker, validator) => {
                 const { operator_address, jailed } = validator
-                const { contact } = validator
 
                 const delegated = delegations?.find(
                   ({ validator_address }) =>
@@ -178,7 +158,7 @@ const Validators = () => {
 
                 return (
                   <Flex start gap={8}>
-                    <ProfileIcon src={validator.picture} size={22} />
+                    <ProfileIcon src={validator.description.identity} size={22} />
 
                     <Grid gap={2}>
                       <Flex gap={4} start>
@@ -189,7 +169,7 @@ const Validators = () => {
                           {moniker}
                         </Link>
 
-                        {contact?.email && (
+                        {(
                           <VerifiedIcon
                             className="info"
                             style={{ fontSize: 12 }}
@@ -236,40 +216,6 @@ const Validators = () => {
               render: ({ rate }: Validator.CommissionRates) =>
                 readPercent(rate.toString(), { fixed: 2 }),
               align: "right",
-            },
-            // {
-            //   title: t("Uptime"),
-            //   tooltip: t("90 days uptime EMA"),
-            //   dataIndex: "time_weighted_uptime",
-            //   defaultSortOrder: "desc",
-            //   key: "uptime",
-            //   sorter: (
-            //     { time_weighted_uptime: a = 0 },
-            //     { time_weighted_uptime: b = 0 }
-            //   ) => a - b,
-            //   render: (value) => !!value && <Uptime>{value}</Uptime>,
-            //   align: "right",
-            //   hidden: !isClassic,
-            // },
-            {
-              title: t("Rewards"),
-              tooltip: t("Estimated monthly rewards with 100 Lunc staked"),
-              dataIndex: "rewards_30d",
-              defaultSortOrder: "desc",
-              key: "rewards",
-              sorter: ({ rewards_30d: a = "0" }, { rewards_30d: b = "0" }) =>
-                Number(a) - Number(b),
-              render: (value) =>
-                !!value && (
-                  <Read
-                    amount={Number(value) * 100}
-                    denom="uluna"
-                    decimals={0}
-                    fixed={6}
-                  />
-                ),
-              align: "right",
-              hidden: !isClassic,
             },
           ]}
         />

@@ -6,7 +6,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined"
 import { readPercent } from "@terra-rebels/kitchen-utils"
 import { ValAddress, Vote } from "@terra-rebels/terra.js"
 import { combineState } from "data/query"
-import { useDelegations } from "data/queries/staking"
+import {useDelegations, useValidators} from "data/queries/staking"
 import { useGetVoteOptionItem } from "data/queries/gov"
 import { getCalcVotingPowerRate } from "data/Terra/TerraAPI"
 import { useTerraProposal, useTerraValidators } from "data/Terra/TerraAPI"
@@ -45,7 +45,7 @@ const ProposalVotesByValidator = ({ id }: { id: number }) => {
   const { data: delegations, ...delegationsState } = useDelegations()
   const { data: TerraProposal, ...TerraProposalState } = useTerraProposal(id)
   const { data: TerraValidators, ...TerraValidatorsState } =
-    useTerraValidators()
+    useValidators()
 
   const state = combineState(
     delegationsState,

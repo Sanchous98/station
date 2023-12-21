@@ -7,9 +7,7 @@ export const currencyState = atom({
   default: getLocalSetting<string>(SettingKey.Currency),
 })
 
-export const useCurrency = () => {
-  return "uluna"
-}
+export const useCurrency = () => "uluna"
 
 export const useCurrencyState = () => {
   const [currency, setCurrency] = useRecoilState(currencyState)
