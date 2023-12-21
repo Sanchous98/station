@@ -33,7 +33,7 @@ const Validators = () => {
     delegationsState,
     undelegationsState,
   )
-console.log(validators?.filter(validator => validator.description.identity !== ""))
+
   const [byDelegated, setByDelegated] = useState(false)
 
   const activeValidators = useMemo(() => {
