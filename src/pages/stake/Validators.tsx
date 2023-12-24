@@ -167,7 +167,7 @@ const Validators = () => {
 
                 return (
                   <Flex start gap={8}>
-                    <ProfileIcon src={validator.description.identity} size={22} />
+                    <ProfileIcon rel={validator.description.identity} size={22} />
 
                     <Grid gap={2}>
                       <Flex gap={4} start>

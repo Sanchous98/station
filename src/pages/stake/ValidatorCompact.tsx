@@ -33,7 +33,7 @@ const ValidatorCompact = ({ vertical }: { vertical?: boolean }) => {
       <Grid gap={16}>
         <header className={cx(styles.header, { vertical })}>
           {TerraValidator && (
-            <ProfileIcon src={TerraValidator.picture} size={60} />
+            <ProfileIcon abs={TerraValidator.picture} size={60} />
           )}
 
           <Grid gap={4}>
