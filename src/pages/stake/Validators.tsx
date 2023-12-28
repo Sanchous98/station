@@ -51,29 +51,19 @@ const Validators = () => {
 
     const sortedValidators = validators
         .filter(({ status, operator_address }) => !getIsUnbonded(status) &&
-          (!byDelegated ? true : isDelegated(operator_address)))
+          (!byDelegated || isDelegated(operator_address)))
         .map((validator) => {
           const { operator_address } = validator
           const voting_power_rate = calcRate(operator_address)
           return {
             ...validator,
-            rank:
-                (priorityVals.includes(operator_address) ? 1 : 0) + Math.random(),
+            rank: (priorityVals.includes(operator_address) ? 1 : 0) + Math.random(),
             voting_power_rate,
           }
         })
         .sort((a, b) => b.rank - a.rank)
 
-    sortedValidators.unshift(
-        sortedValidators.splice(
-            sortedValidators.findIndex(
-                (item) => item.description.moniker.toLowerCase() === "hexxagon"
-            ),
-            1
-        )[0]
-    )
-
-    return sortedValidators
+    return sortedValidators;
   }, [byDelegated, isDelegated, validators])
 
   const renderCount = () => {
@@ -138,11 +128,10 @@ const Validators = () => {
           onSort={() => setByRank(false)}
           initialSorterKey={byRank ? undefined : "rewards"}
           dataSource={activeValidators}
-          filter={({ description: { moniker }, operator_address }) => {
-            if (!keyword) return true
-            if (moniker.toLowerCase().includes(keyword.toLowerCase()))  return true
-            return operator_address === keyword
-          }}
+          filter={
+            ({ description: { moniker }, operator_address }) =>
+                !keyword || moniker.toLowerCase().includes(keyword.toLowerCase()) || operator_address === keyword
+          }
           sorter={(a, b) => Number(a.jailed) - Number(b.jailed)}
           rowKey={({ operator_address }) => operator_address}
           columns={[
