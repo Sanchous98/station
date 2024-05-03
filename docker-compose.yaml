@@ -1,7 +1,7 @@
 name: terra-station-legacy
 services:
   main_app:
-    container_name: terra-station
     image: ghcr.io/sanchous98/terra-station-legacy:latest
     restart: unless-stopped
-    ports: ["3000:3000"]
+    ports:
+      - "88:80"
